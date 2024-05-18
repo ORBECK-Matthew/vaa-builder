@@ -9,8 +9,8 @@ import * as THREE from "three";
 import { useRef } from "react";
 
 const cameraPositions = {
-  [CameraModes.HEAD]: {
-    position: new THREE.Vector3(0, 0.5, 1),
+  [CameraModes.VAA]: {
+    position: new THREE.Vector3(-5, 3, 3),
     target: new THREE.Vector3(0, 0.5, 0),
   },
   [CameraModes.TOP]: {

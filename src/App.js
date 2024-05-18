@@ -7,31 +7,41 @@ import { Suspense } from "react";
 import { Interface } from "./components/Interface";
 import { CameraControls } from "./components/CameraControls";
 import { Ocean } from "./components/Ocean";
+import {
+  VaaCustomisationProvider,
+  useVaaCustomisation,
+} from "./contexts/VaaCustomisationContext";
+
+function VaaScene() {
+  const { getVaa } = useVaaCustomisation();
+  const VaaModel = getVaa();
+
+  return (
+    <Suspense fallback={null}>
+      <VaaModel />
+      <Ocean />
+    </Suspense>
+  );
+}
 
 export default function App() {
   return (
-    <div className="h-screen">
-      <Canvas>
-        <CameraControls />
-        {/* <ambientLight intensity={0.1} />
-        <directionalLight color="red" position={[3, 3, 5]} /> */}
-        <directionalLight
-          intensity={5}
-          position={[-5, 5, 5]}
-          castShadow
-          shadow-mapSize-width={2048}
-          shadow-mapSize-height={2048}
-        />
-        <Sky scale={1000} sunPosition={[500, 150, -1000]} turbidity={0.1} />
-        <mesh>
-          <boxGeometry />
-          <meshStandardMaterial />
-        </mesh>
-        <Suspense fallback={null}>
-          <Ocean />
-        </Suspense>
-      </Canvas>
-      <Interface />
-    </div>
+    <VaaCustomisationProvider>
+      <div className="h-screen">
+        <Canvas>
+          <CameraControls />
+          <directionalLight
+            intensity={5}
+            position={[-5, 5, 5]}
+            castShadow
+            shadow-mapSize-width={2048}
+            shadow-mapSize-height={2048}
+          />
+          <Sky scale={1000} sunPosition={[500, 150, -1000]} turbidity={0.1} />
+          <VaaScene />
+        </Canvas>
+        <Interface />
+      </div>
+    </VaaCustomisationProvider>
   );
 }

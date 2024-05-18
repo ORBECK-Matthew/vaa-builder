@@ -3,6 +3,7 @@ import {
   CameraModes,
   useVaaCustomisation,
 } from "../contexts/VaaCustomisationContext";
+import { VaaConfigurator } from "./VaaConfigurator";
 
 export const Interface = () => {
   const { cameraMode, setCameraMode } = useVaaCustomisation();
@@ -20,6 +21,9 @@ export const Interface = () => {
             </Button>
           ))}
         </Group>
+      </Affix>
+      <Affix position={{ top: 65, right: 20 }}>
+        {cameraMode === CameraModes.VAA && <VaaConfigurator />}
       </Affix>
     </>
   );
