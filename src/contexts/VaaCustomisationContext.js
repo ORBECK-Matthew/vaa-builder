@@ -1,18 +1,13 @@
 import { createContext, useContext, useState } from "react";
-import { DefaultVaaModel } from "../components/Vaa.js";
-import { CompetitionVaaModel } from "../components/Vaa2.js";
+import { DefaultVaaModel } from "../models/Vaa.js";
+import { TraditionVaaModel } from "../models/Vaa2.js";
+import { CompetitionVaaModel } from "../models/Vaa3.js";
+
+import { DefaultPagaieModel } from "../models/Pagaie.js";
 
 const VaaCustomisationContext = createContext({});
 
-export const CameraModes = {
-  FREE: "FREE",
-  VAA: "VAA",
-  TOP: "TOP",
-  BOTTOM: "BOTTOM",
-};
-
 export const VaaCustomisationProvider = ({ children }) => {
-  const [cameraMode, setCameraMode] = useState(CameraModes.FREE);
   const [vaa, setVaa] = useState(0);
   const [pagaie, setPagaie] = useState(0);
 
@@ -21,22 +16,34 @@ export const VaaCustomisationProvider = ({ children }) => {
       case 0:
         return DefaultVaaModel;
       case 1:
+        return TraditionVaaModel;
+      case 2:
         return CompetitionVaaModel;
       default:
         return DefaultVaaModel;
     }
   };
 
+  const getPagaie = () => {
+    switch (pagaie) {
+      case 0:
+        return DefaultPagaieModel;
+      case 1:
+        return TraditionVaaModel;
+      default:
+        return DefaultPagaieModel;
+    }
+  };
+
   return (
     <VaaCustomisationContext.Provider
       value={{
-        cameraMode,
-        setCameraMode,
         vaa,
         setVaa,
         getVaa,
         pagaie,
         setPagaie,
+        getPagaie,
       }}
     >
       {children}

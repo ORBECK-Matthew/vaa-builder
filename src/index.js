@@ -6,13 +6,16 @@ import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { VaaCustomisationProvider } from "./contexts/VaaCustomisationContext";
 import { MantineProvider } from "@mantine/core";
+import { CameraProvider } from "./contexts/CameraContext";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
     <MantineProvider>
       <VaaCustomisationProvider>
-        <App />
+        <CameraProvider>
+          <App />
+        </CameraProvider>
       </VaaCustomisationProvider>
     </MantineProvider>
   </React.StrictMode>

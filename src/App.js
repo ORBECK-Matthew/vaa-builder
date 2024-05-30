@@ -1,46 +1,48 @@
 // Libraries
-import { Canvas } from "@react-three/fiber";
-import { Sky } from "@react-three/drei";
-import { Suspense } from "react";
-
+import { Canvas, useFrame } from "@react-three/fiber";
+import { useState, useRef, useEffect } from "react";
 // Components
 import { Interface } from "./components/Interface";
-import { CameraControls } from "./components/CameraControls";
-import { Ocean } from "./components/Ocean";
-import {
-  VaaCustomisationProvider,
-  useVaaCustomisation,
-} from "./contexts/VaaCustomisationContext";
-
-function VaaScene() {
-  const { getVaa } = useVaaCustomisation();
-  const VaaModel = getVaa();
-
-  return (
-    <Suspense fallback={null}>
-      <VaaModel />
-      <Ocean />
-    </Suspense>
-  );
-}
+import { VaaCustomisationProvider } from "./contexts/VaaCustomisationContext";
+import { ConfiguratorScene } from "./scenes/ConfiguratorScene";
+import { GameScene } from "./scenes/GameScene";
+import { HomeScene } from "./scenes/HomeScene";
 
 export default function App() {
+  const cameraRef = useRef();
+  const [currentScene, setCurrentScene] = useState("home");
+
   return (
     <VaaCustomisationProvider>
       <div className="h-screen">
         <Canvas>
-          <CameraControls />
-          <directionalLight
-            intensity={5}
-            position={[-5, 5, 5]}
-            castShadow
-            shadow-mapSize-width={2048}
-            shadow-mapSize-height={2048}
-          />
-          <Sky scale={1000} sunPosition={[500, 150, -1000]} turbidity={0.1} />
-          <VaaScene />
+          {currentScene === "config" && <ConfiguratorScene />}
+          {currentScene === "game" && <GameScene />}
+          {currentScene === "home" && (
+            <HomeScene setCurrentScene={setCurrentScene} />
+          )}
         </Canvas>
-        <Interface />
+
+        {currentScene === "config" && <Interface />}
+        {currentScene === "config" && (
+          <button
+            onClick={() => setCurrentScene("game")}
+            style={{
+              position: "absolute",
+              bottom: "20px",
+              left: "50%",
+              transform: "translateX(-50%)",
+              padding: "10px 20px",
+              backgroundColor: "#228BE6",
+              color: "white",
+              border: "none",
+              borderRadius: "5px",
+              cursor: "pointer",
+            }}
+          >
+            JOUER
+          </button>
+        )}
       </div>
     </VaaCustomisationProvider>
   );
