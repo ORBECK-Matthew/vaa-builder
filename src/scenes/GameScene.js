@@ -1,42 +1,53 @@
-import { Suspense, useEffect, useRef } from "react";
+import { Suspense, useEffect, useRef, useState } from "react";
 import { useVaaCustomisation } from "../contexts/VaaCustomisationContext";
-import { Sky } from "@react-three/drei";
+import { Box, Sky } from "@react-three/drei";
 import { Ocean } from "../components/Ocean";
 import { useFrame } from "@react-three/fiber";
 import { CameraControls } from "../components/CameraControls";
 import { useCamera, CameraModes } from "../contexts/CameraContext";
 
-export const GameScene = () => {
+export const GameScene = ({ onReachFinishLine, countdownComplete }) => {
   const { getVaa, getPagaie } = useVaaCustomisation();
   const { setCameraMode } = useCamera();
   const VaaModel = getVaa();
   const vaaRef = useRef();
   const PagaieModel = getPagaie();
-  const vaaVelocity = useRef({ x: 0, y: 0, z: 0 });
-  const lastPressTime = useRef({ left: 0, right: 0 });
+  const vaaVelocity = useRef(0); // Single value for forward velocity
+  const lastPressTime = useRef({ left: 0, right: 0, keydown: 0 });
   const syncThreshold = 300; // Time threshold in ms for considering the presses as synchronized
+  const finishLineX = 10; // Position X of the finish line
+  const [keyState, setKeyState] = useState({ left: false, right: false }); // Track key states
 
   useEffect(() => {
     setCameraMode(CameraModes.GAME);
+
     const handleKeyDown = (event) => {
+      if (!countdownComplete) return;
       const currentTime = Date.now();
-      if (event.key === "ArrowLeft") {
-        lastPressTime.current.left = currentTime;
-        if (currentTime - lastPressTime.current.right < syncThreshold) {
-          vaaVelocity.current.x = Math.min(vaaVelocity.current.x + 0.001, 1); // Increase speed, max 1
-        }
-      } else if (event.key === "ArrowRight") {
-        lastPressTime.current.right = currentTime;
-        if (currentTime - lastPressTime.current.left < syncThreshold) {
-          vaaVelocity.current.x = Math.min(vaaVelocity.current.x + 0.001, 1); // Increase speed, max 1
-        }
+      if (event.key === "ArrowLeft" || event.key === "ArrowRight") {
+        lastPressTime.current.keydown = currentTime;
+        lastPressTime.current[event.key === "ArrowLeft" ? "left" : "right"] =
+          currentTime;
+        setKeyState((prevState) => ({
+          ...prevState,
+          [event.key === "ArrowLeft" ? "left" : "right"]: true,
+        }));
       }
     };
 
     const handleKeyUp = (event) => {
+      if (!countdownComplete) return;
+      const currentTime = Date.now();
       if (event.key === "ArrowLeft" || event.key === "ArrowRight") {
-        // Optional: Decrease speed when keys are released
-        vaaVelocity.current.z = Math.max(vaaVelocity.current.z - 0.1, 0); // Decrease speed, min 0
+        const pressTime = lastPressTime.current.keydown;
+        if (currentTime - pressTime < syncThreshold) {
+          // Increase speed if keyup occurs within the syncThreshold after keydown
+          vaaVelocity.current = Math.min(vaaVelocity.current + 0.01, 0.5);
+        }
+        setKeyState((prevState) => ({
+          ...prevState,
+          [event.key === "ArrowLeft" ? "left" : "right"]: false,
+        }));
       }
     };
 
@@ -47,14 +58,30 @@ export const GameScene = () => {
       window.removeEventListener("keydown", handleKeyDown);
       window.removeEventListener("keyup", handleKeyUp);
     };
-  }, [setCameraMode]);
+  }, [setCameraMode, countdownComplete]);
 
-  // Update the vaa's position on each frame
   useFrame(() => {
     if (vaaRef.current) {
-      vaaRef.current.position.x += vaaVelocity.current.x;
-      vaaRef.current.position.y += vaaVelocity.current.y;
-      vaaRef.current.position.z += vaaVelocity.current.z;
+      const currentTime = Date.now();
+      const timeSinceLastLeft = currentTime - lastPressTime.current.left;
+      const timeSinceLastRight = currentTime - lastPressTime.current.right;
+
+      if (keyState.left && keyState.right) {
+        // Keys are being pressed, check synchronization
+        if (Math.abs(timeSinceLastLeft - timeSinceLastRight) > syncThreshold) {
+          // Desynchronized, slow down
+          vaaVelocity.current = Math.max(vaaVelocity.current * 0.9, 0);
+        }
+      } else if (!keyState.left && !keyState.right) {
+        // No keys are being pressed, slow down significantly
+        vaaVelocity.current = Math.max(vaaVelocity.current * 0.9, 0);
+      }
+
+      vaaRef.current.position.x += vaaVelocity.current;
+
+      if (vaaRef.current.position.x >= finishLineX) {
+        onReachFinishLine();
+      }
     }
   });
 
@@ -74,6 +101,8 @@ export const GameScene = () => {
         <PagaieModel />
         <Ocean />
       </Suspense>
+      {/* Finish Line */}
+      <Box position={[finishLineX, 0, 0]} scale={[1, 3, 1]}></Box>
     </>
   );
 };

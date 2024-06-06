@@ -1,23 +1,29 @@
 import { Html, Sky } from "@react-three/drei";
 import { CameraControls } from "../components/CameraControls";
 import { useCamera, CameraModes } from "../contexts/CameraContext";
-import { Suspense, useEffect } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { Ocean } from "../components/Ocean";
 import { useVaaCustomisation } from "../contexts/VaaCustomisationContext";
 
 export const HomeScene = ({ setCurrentScene }) => {
   const { setCameraMode } = useCamera();
-
   const { getVaa, getPagaie } = useVaaCustomisation();
   const VaaModel = getVaa();
   const PagaieModel = getPagaie();
+  const [fadeClass, setFadeClass] = useState("");
 
   useEffect(() => {
     setCameraMode(CameraModes.HOME);
   }, [setCameraMode]);
 
   const handleButtonClick = () => {
-    setCurrentScene("config");
+    setFadeClass("fade-out");
+    setTimeout(() => {
+      setCameraMode(CameraModes.VAA); // Transition caméra vers VAA
+      setTimeout(() => {
+        setCurrentScene("config");
+      }, 1000); // Durée de la transition de la caméra
+    }, 1000); // Durée de l'animation de fondu
   };
 
   return (
@@ -38,6 +44,7 @@ export const HomeScene = ({ setCurrentScene }) => {
       </Suspense>
       <Html center position={[10, 5, 0]}>
         <div
+          className={`fade-container ${fadeClass}`}
           style={{
             backgroundColor: "transparent",
             padding: "20px",
@@ -48,7 +55,9 @@ export const HomeScene = ({ setCurrentScene }) => {
           <p
             style={{
               margin: 0,
-              color: "black",
+              color: "white",
+              textShadow:
+                "2px 0 #000, -2px 0 #000, 0 2px #000, 0 -2px #000, 1px 1px #000, -1px -1px #000, 1px -1px #000, -1px 1px #000",
               fontFamily: "PoetsenOne",
               fontSize: "3em",
             }}
@@ -67,7 +76,7 @@ export const HomeScene = ({ setCurrentScene }) => {
               cursor: "pointer",
             }}
           >
-            Configurer votre vaa
+            JOUER
           </button>
         </div>
       </Html>
