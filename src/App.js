@@ -12,7 +12,8 @@ export default function App() {
   const [currentScene, setCurrentScene] = useState("home");
   const [fadeClass, setFadeClass] = useState("fade-in");
   const [stopTimer, setStopTimer] = useState(false);
-  const [countdownComplete, setCountdownComplete] = useState(false); // New state
+  const [countdownComplete, setCountdownComplete] = useState(false);
+  const [vaaPosition, setVaaPosition] = useState({ x: 0, y: 0, z: 0 }); // New state
 
   const handleSceneChange = (scene) => {
     setFadeClass("fade-out");
@@ -20,10 +21,17 @@ export default function App() {
       setCurrentScene(scene);
       setFadeClass("fade-in");
       if (scene === "game") {
-        setStopTimer(false); // Reset the timer
-        setCountdownComplete(false); // Reset countdown status
+        setStopTimer(false);
+        setCountdownComplete(false);
+        setVaaPosition({ x: 0, y: 0, z: 0 }); // Reset Vaa position
       }
-    }, 1000); // Durée de l'animation de fondu
+    }, 1000);
+  };
+
+  const handleRestartGame = () => {
+    setStopTimer(false);
+    setCountdownComplete(false);
+    setVaaPosition({ x: 0, y: 0, z: 0 });
   };
 
   const handleReachFinishLine = () => {
@@ -32,7 +40,7 @@ export default function App() {
 
   const handleCountDownComplete = () => {
     console.log("Countdown Complete");
-    setCountdownComplete(true); // Update countdown status
+    setCountdownComplete(true);
   };
 
   return (
@@ -43,7 +51,8 @@ export default function App() {
           {currentScene === "game" && (
             <GameScene
               onReachFinishLine={handleReachFinishLine}
-              countdownComplete={countdownComplete} // Pass the state
+              countdownComplete={countdownComplete}
+              vaaPosition={vaaPosition} // Pass Vaa position state
             />
           )}
           {currentScene === "home" && (
@@ -75,14 +84,14 @@ export default function App() {
         )}
         {currentScene === "game" && (
           <CountdownTimer
-            startCountdown={3} // 3 seconds countdown
-            onComplete={handleCountDownComplete} // Updated to call directly
+            startCountdown={3}
+            onComplete={handleCountDownComplete}
             stopTimer={stopTimer}
           />
         )}
         {currentScene === "game" && stopTimer === true ? (
           <EndGameScene
-            onPlayAgain={() => handleSceneChange("game")}
+            onPlayAgain={handleRestartGame}
             onConfigure={() => handleSceneChange("config")}
           />
         ) : (
