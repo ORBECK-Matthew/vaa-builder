@@ -7,6 +7,8 @@ import reportWebVitals from "./reportWebVitals";
 import { VaaCustomisationProvider } from "./contexts/VaaCustomisationContext";
 import { MantineProvider } from "@mantine/core";
 import { CameraProvider } from "./contexts/CameraContext";
+import { BrowserRouter } from "react-router-dom";
+import AuthProvider from "./contexts/AuthProvider";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
@@ -14,7 +16,11 @@ root.render(
     <MantineProvider>
       <VaaCustomisationProvider>
         <CameraProvider>
-          <App />
+          <BrowserRouter>
+            <AuthProvider>
+              <App />
+            </AuthProvider>
+          </BrowserRouter>
         </CameraProvider>
       </VaaCustomisationProvider>
     </MantineProvider>
