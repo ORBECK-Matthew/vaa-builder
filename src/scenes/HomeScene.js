@@ -62,7 +62,7 @@ export const HomeScene = ({ setCurrentScene }) => {
               fontSize: "3em",
             }}
           >
-            LCVCK Tournament
+            Va'a Sprint
           </p>
           <button
             onClick={handleButtonClick}

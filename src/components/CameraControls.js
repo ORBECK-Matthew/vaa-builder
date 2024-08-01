@@ -41,7 +41,7 @@ export const CameraControls = ({ vaaRef }) => {
     if (cameraMode !== CameraModes.FREE) {
       if (cameraMode === CameraModes.GAME && vaaRef.current) {
         const vaaPosition = vaaRef.current.position;
-        const offset = new THREE.Vector3(-5, 10, 0);
+        const offset = new THREE.Vector3(-8, 3, 0);
         const desiredPosition = vaaPosition.clone().add(offset);
 
         state.camera.position.lerp(desiredPosition, 3 * delta);

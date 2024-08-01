@@ -13,7 +13,8 @@ export default function App() {
   const [fadeClass, setFadeClass] = useState("fade-in");
   const [stopTimer, setStopTimer] = useState(false);
   const [countdownComplete, setCountdownComplete] = useState(false);
-  const [vaaPosition, setVaaPosition] = useState({ x: 0, y: 0, z: 0 }); // New state
+  const [vaaPosition, setVaaPosition] = useState({ x: 0, y: 0, z: 0 });
+  const [resetTimer, setResetTimer] = useState(false); // Add this state
 
   const handleSceneChange = (scene) => {
     setFadeClass("fade-out");
@@ -24,6 +25,7 @@ export default function App() {
         setStopTimer(false);
         setCountdownComplete(false);
         setVaaPosition({ x: 0, y: 0, z: 0 }); // Reset Vaa position
+        setResetTimer(true); // Reset the timer when game scene starts
       }
     }, 1000);
   };
@@ -32,6 +34,7 @@ export default function App() {
     setStopTimer(false);
     setCountdownComplete(false);
     setVaaPosition({ x: 0, y: 0, z: 0 });
+    setResetTimer(true); // Reset the timer when restarting the game
   };
 
   const handleReachFinishLine = () => {
@@ -42,6 +45,12 @@ export default function App() {
     console.log("Countdown Complete");
     setCountdownComplete(true);
   };
+
+  useEffect(() => {
+    if (resetTimer) {
+      setResetTimer(false); // Clear the reset state after triggering reset
+    }
+  }, [resetTimer]);
 
   return (
     <VaaCustomisationProvider>
@@ -87,6 +96,7 @@ export default function App() {
             startCountdown={3}
             onComplete={handleCountDownComplete}
             stopTimer={stopTimer}
+            resetTimer={resetTimer} // Pass resetTimer prop
           />
         )}
         {currentScene === "game" && stopTimer === true ? (
