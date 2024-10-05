@@ -6,6 +6,7 @@ import { ConfiguratorScene } from "./scenes/ConfiguratorScene";
 import { GameScene } from "./scenes/GameScene";
 import { HomeScene } from "./scenes/HomeScene";
 import { CountdownTimer } from "./components/CountDownTimer";
+import { Timer } from "./components/Timer";
 import { EndGameScene } from "./scenes/EndGameScene";
 
 export default function App() {
@@ -14,7 +15,13 @@ export default function App() {
   const [stopTimer, setStopTimer] = useState(false);
   const [countdownComplete, setCountdownComplete] = useState(false);
   const [vaaPosition, setVaaPosition] = useState({ x: 0, y: 0, z: 0 });
-  const [resetTimer, setResetTimer] = useState(false); // Add this state
+  const [resetTimer, setResetTimer] = useState(false);
+  const [elapsedTime, setElapsedTime] = useState(0);
+  const [personalBestTime, setPersonalBestTime] = useState(() => {
+    // Récupérer le meilleur temps du localStorage
+    const savedTime = localStorage.getItem("personalBestTime");
+    return savedTime ? parseFloat(savedTime) : null; // Convertir en nombre
+  });
 
   const handleSceneChange = (scene) => {
     setFadeClass("fade-out");
@@ -22,33 +29,46 @@ export default function App() {
       setCurrentScene(scene);
       setFadeClass("fade-in");
       if (scene === "game") {
-        setStopTimer(false);
-        setCountdownComplete(false);
-        setVaaPosition({ x: 0, y: 0, z: 0 }); // Reset Vaa position
-        setResetTimer(true); // Reset the timer when game scene starts
+        resetGame();
       }
     }, 1000);
   };
 
-  const handleRestartGame = () => {
+  const resetGame = () => {
     setStopTimer(false);
     setCountdownComplete(false);
     setVaaPosition({ x: 0, y: 0, z: 0 });
-    setResetTimer(true); // Reset the timer when restarting the game
+    setElapsedTime(0);
+    setResetTimer(true);
+  };
+
+  const handleRestartGame = () => {
+    setCurrentScene("game");
+    resetGame();
   };
 
   const handleReachFinishLine = () => {
     setStopTimer(true);
+    // Vérifier et mettre à jour le meilleur temps
+    if (personalBestTime === null || elapsedTime < personalBestTime) {
+      setPersonalBestTime(elapsedTime);
+      localStorage.setItem("personalBestTime", elapsedTime); // Enregistrer dans localStorage
+    }
   };
 
   const handleCountDownComplete = () => {
     console.log("Countdown Complete");
     setCountdownComplete(true);
+    setStopTimer(false);
+  };
+
+  const handleElapsedTimeUpdate = (time) => {
+    setElapsedTime(time);
   };
 
   useEffect(() => {
     if (resetTimer) {
-      setResetTimer(false); // Clear the reset state after triggering reset
+      setResetTimer(false);
     }
   }, [resetTimer]);
 
@@ -61,7 +81,7 @@ export default function App() {
             <GameScene
               onReachFinishLine={handleReachFinishLine}
               countdownComplete={countdownComplete}
-              vaaPosition={vaaPosition} // Pass Vaa position state
+              vaaPosition={vaaPosition}
             />
           )}
           {currentScene === "home" && (
@@ -91,21 +111,29 @@ export default function App() {
             </button>
           </div>
         )}
-        {currentScene === "game" && (
+
+        {currentScene === "game" && !countdownComplete && (
           <CountdownTimer
             startCountdown={3}
             onComplete={handleCountDownComplete}
-            stopTimer={stopTimer}
-            resetTimer={resetTimer} // Pass resetTimer prop
+            resetTimer={resetTimer}
           />
         )}
-        {currentScene === "game" && stopTimer === true ? (
+
+        {currentScene === "game" && countdownComplete && (
+          <Timer
+            stopTimer={stopTimer}
+            onElapsedTimeUpdate={handleElapsedTimeUpdate}
+          />
+        )}
+
+        {currentScene === "game" && stopTimer && (
           <EndGameScene
             onPlayAgain={handleRestartGame}
             onConfigure={() => handleSceneChange("config")}
+            elapsedTime={elapsedTime}
+            personalBestTime={personalBestTime} // Passer le meilleur temps
           />
-        ) : (
-          ""
         )}
       </div>
     </VaaCustomisationProvider>
