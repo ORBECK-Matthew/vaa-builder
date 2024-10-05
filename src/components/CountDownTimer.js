@@ -1,12 +1,17 @@
 import { useState, useEffect } from "react";
 
-export const CountdownTimer = ({ startCountdown, onComplete, stopTimer }) => {
+export const CountdownTimer = ({
+  startCountdown,
+  onComplete,
+  stopTimer,
+  resetTimer,
+}) => {
   const [countdown, setCountdown] = useState(startCountdown);
   const [elapsedTime, setElapsedTime] = useState(0);
   const [isCountingDown, setIsCountingDown] = useState(true);
 
   useEffect(() => {
-    let timer;
+    let timer = 0;
     if (isCountingDown) {
       timer = setInterval(() => {
         setCountdown((prevCountdown) => {
@@ -18,6 +23,7 @@ export const CountdownTimer = ({ startCountdown, onComplete, stopTimer }) => {
           return prevCountdown - 1;
         });
       }, 1000);
+      setElapsedTime(0);
     } else {
       timer = setInterval(() => {
         if (!stopTimer) {
@@ -27,6 +33,15 @@ export const CountdownTimer = ({ startCountdown, onComplete, stopTimer }) => {
     }
     return () => clearInterval(timer);
   }, [isCountingDown, onComplete, stopTimer]);
+
+  // Reset the timer when resetTimer changes
+  useEffect(() => {
+    if (resetTimer) {
+      setCountdown(startCountdown);
+      setElapsedTime(0);
+      setIsCountingDown(true);
+    }
+  }, [resetTimer, startCountdown]);
 
   return (
     <>

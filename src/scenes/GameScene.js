@@ -21,6 +21,33 @@ export const GameScene = ({
   const syncThreshold = 300;
   const finishLineX = 10;
   const [keyState, setKeyState] = useState({ left: false, right: false });
+  const [lastKey, setLastKey] = useState(null);
+  const [count, setCount] = useState(0); // Ajouter un état pour le nombre
+
+  useFrame(() => {
+    if (vaaRef.current) {
+      const currentTime = Date.now();
+      const timeSinceLastLeft = currentTime - lastPressTime.current.left;
+      const timeSinceLastRight = currentTime - lastPressTime.current.right;
+
+      if (keyState.left && keyState.right) {
+        if (Math.abs(timeSinceLastLeft - timeSinceLastRight) > syncThreshold) {
+          vaaVelocity.current = Math.max(vaaVelocity.current * 0.9, 0);
+        }
+      } else if (!keyState.left && !keyState.right) {
+        vaaVelocity.current = Math.max(vaaVelocity.current * 0.9, 0);
+      }
+
+      vaaRef.current.position.x += vaaVelocity.current;
+
+      if (vaaRef.current.position.x >= finishLineX) {
+        onReachFinishLine();
+      }
+
+      // Reduce the velocity over time (friction effect)
+      vaaVelocity.current = Math.max(vaaVelocity.current * 0.99, 0);
+    }
+  });
 
   useEffect(() => {
     setCameraMode(CameraModes.GAME);
@@ -63,33 +90,25 @@ export const GameScene = ({
     };
   }, [setCameraMode, countdownComplete]);
 
-  useFrame(() => {
-    if (vaaRef.current) {
-      const currentTime = Date.now();
-      const timeSinceLastLeft = currentTime - lastPressTime.current.left;
-      const timeSinceLastRight = currentTime - lastPressTime.current.right;
-
-      if (keyState.left && keyState.right) {
-        if (Math.abs(timeSinceLastLeft - timeSinceLastRight) > syncThreshold) {
-          vaaVelocity.current = Math.max(vaaVelocity.current * 0.9, 0);
-        }
-      } else if (!keyState.left && !keyState.right) {
-        vaaVelocity.current = Math.max(vaaVelocity.current * 0.9, 0);
-      }
-
-      vaaRef.current.position.x += vaaVelocity.current;
-
-      if (vaaRef.current.position.x >= finishLineX) {
-        onReachFinishLine();
-      }
-    }
-  });
-
   useEffect(() => {
     if (vaaRef.current) {
       vaaRef.current.position.set(vaaPosition.x, vaaPosition.y, vaaPosition.z);
     }
   }, [vaaPosition]);
+
+  useEffect(() => {
+    const handleKeyDown = (event) => {
+      if (event.key === "ArrowRight") {
+        setCount((prevCount) => prevCount + 1); // Incrémenter le nombre
+      }
+      console.log(count);
+    };
+
+    document.addEventListener("keydown", handleKeyDown);
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, []);
 
   return (
     <>
