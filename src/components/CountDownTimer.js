@@ -1,79 +1,50 @@
 import { useState, useEffect } from "react";
 
-export const CountdownTimer = ({
-  startCountdown,
-  onComplete,
-  stopTimer,
-  resetTimer,
-}) => {
+export const CountdownTimer = ({ startCountdown, onComplete, resetTimer }) => {
   const [countdown, setCountdown] = useState(startCountdown);
-  const [elapsedTime, setElapsedTime] = useState(0);
   const [isCountingDown, setIsCountingDown] = useState(true);
 
   useEffect(() => {
-    let timer = 0;
+    let timer;
     if (isCountingDown) {
       timer = setInterval(() => {
         setCountdown((prevCountdown) => {
           if (prevCountdown <= 1) {
             clearInterval(timer);
             setIsCountingDown(false);
-            onComplete();
+            // Utiliser setTimeout pour éviter de mettre à jour l'état pendant le rendu
+            setTimeout(onComplete, 0);
+            return 0; // Assure que countdown ne devienne pas négatif
           }
           return prevCountdown - 1;
         });
       }, 1000);
-      setElapsedTime(0);
-    } else {
-      timer = setInterval(() => {
-        if (!stopTimer) {
-          setElapsedTime((prevTime) => parseFloat((prevTime + 0.1).toFixed(1)));
-        }
-      }, 100);
     }
     return () => clearInterval(timer);
-  }, [isCountingDown, onComplete, stopTimer]);
+  }, [isCountingDown, onComplete]);
 
-  // Reset the timer when resetTimer changes
+  // Réinitialisation du compte à rebours lorsque `resetTimer` change
   useEffect(() => {
     if (resetTimer) {
       setCountdown(startCountdown);
-      setElapsedTime(0);
       setIsCountingDown(true);
     }
   }, [resetTimer, startCountdown]);
 
   return (
-    <>
-      {isCountingDown ? (
-        <div
-          style={{
-            position: "absolute",
-            top: "50%",
-            left: "50%",
-            transform: "translate(-50%, -50%)",
-            fontFamily: "PoetsenOne",
-            fontSize: "48px",
-            color: "white",
-            textAlign: "center",
-          }}
-        >
-          {countdown}
-        </div>
-      ) : (
-        <div
-          style={{
-            position: "absolute",
-            bottom: "20px",
-            left: "20px",
-            fontFamily: "PoetsenOne",
-            fontSize: "24px",
-            color: "white",
-          }}
-        >
-          Time: {elapsedTime.toFixed(1)}s
-        </div>
-      )}
-    </>
+    <div
+      style={{
+        position: "absolute",
+        top: "50%",
+        left: "50%",
+        transform: "translate(-50%, -50%)",
+        fontFamily: "PoetsenOne",
+        fontSize: "48px",
+        color: "white",
+        textAlign: "center",
+      }}
+    >
+      {countdown}
+    </div>
   );
 };

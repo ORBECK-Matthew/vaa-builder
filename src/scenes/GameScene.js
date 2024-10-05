@@ -1,4 +1,4 @@
-import { Suspense, useEffect, useRef, useState } from "react";
+import { Suspense, useCallback, useEffect, useRef, useState } from "react";
 import { useVaaCustomisation } from "../contexts/VaaCustomisationContext";
 import { Box, Sky } from "@react-three/drei";
 import { Ocean } from "../components/Ocean";
@@ -17,98 +17,79 @@ export const GameScene = ({
   const vaaRef = useRef();
   const PagaieModel = getPagaie();
   const vaaVelocity = useRef(0);
-  const lastPressTime = useRef({ left: 0, right: 0, keydown: 0 });
-  const syncThreshold = 300;
   const finishLineX = 10;
-  const [keyState, setKeyState] = useState({ left: false, right: false });
-  const [lastKey, setLastKey] = useState(null);
-  const [count, setCount] = useState(0); // Ajouter un état pour le nombre
+  const [count, setCount] = useState(0); // État pour le nombre
+
+  const leftBtn = document.getElementById("leftBtn");
+  const rightBtn = document.getElementById("rightBtn");
+
+  //======================================== Gestion bouton gauche ========================================//
+  const handleLeftBtnClick = useCallback(() => {
+    if (!countdownComplete) return;
+    leftBtn.disabled = true;
+    rightBtn.disabled = false;
+    leftBtn.classList.add("bg-opacity-30");
+    rightBtn.classList.remove("bg-opacity-30");
+    // Augmenter la vitesse du va'a lorsqu'on clique sur le bouton gauche
+    vaaVelocity.current = Math.min(vaaVelocity.current + 0.01, 0.5);
+  }, [countdownComplete]);
+
+  useEffect(() => {
+    // Ajoutez un écouteur d'événements pour le bouton gauche
+    if (leftBtn) {
+      leftBtn.addEventListener("click", handleLeftBtnClick);
+    }
+    return () => {
+      if (leftBtn) {
+        leftBtn.removeEventListener("click", handleLeftBtnClick);
+      }
+    };
+  }, [handleLeftBtnClick]);
+
+  //======================================== Gestion bouton droit ========================================//
+  const handleRightBtnClick = useCallback(() => {
+    if (!countdownComplete) return;
+    rightBtn.disabled = true;
+    leftBtn.disabled = false;
+    rightBtn.classList.add("bg-opacity-30");
+    leftBtn.classList.remove("bg-opacity-30");
+    // Augmenter la vitesse du va'a lorsqu'on clique sur le bouton droit
+    vaaVelocity.current = Math.min(vaaVelocity.current + 0.01, 0.5);
+  }, [countdownComplete]);
+
+  useEffect(() => {
+    // Ajoutez un écouteur d'événements pour le bouton droit
+    if (rightBtn) {
+      rightBtn.addEventListener("click", handleRightBtnClick);
+    }
+    return () => {
+      if (rightBtn) {
+        rightBtn.removeEventListener("click", handleRightBtnClick);
+      }
+    };
+  }, [handleRightBtnClick]);
 
   useFrame(() => {
     if (vaaRef.current) {
-      const currentTime = Date.now();
-      const timeSinceLastLeft = currentTime - lastPressTime.current.left;
-      const timeSinceLastRight = currentTime - lastPressTime.current.right;
-
-      if (keyState.left && keyState.right) {
-        if (Math.abs(timeSinceLastLeft - timeSinceLastRight) > syncThreshold) {
-          vaaVelocity.current = Math.max(vaaVelocity.current * 0.9, 0);
-        }
-      } else if (!keyState.left && !keyState.right) {
-        vaaVelocity.current = Math.max(vaaVelocity.current * 0.9, 0);
-      }
-
+      // Avancer le va'a en fonction de sa vitesse
       vaaRef.current.position.x += vaaVelocity.current;
 
       if (vaaRef.current.position.x >= finishLineX) {
         onReachFinishLine();
       }
 
-      // Reduce the velocity over time (friction effect)
+      // Réduire la vitesse avec le temps (effet de friction)
       vaaVelocity.current = Math.max(vaaVelocity.current * 0.99, 0);
     }
   });
 
   useEffect(() => {
     setCameraMode(CameraModes.GAME);
-
-    const handleKeyDown = (event) => {
-      if (!countdownComplete) return;
-      const currentTime = Date.now();
-      if (event.key === "ArrowLeft" || event.key === "ArrowRight") {
-        lastPressTime.current.keydown = currentTime;
-        lastPressTime.current[event.key === "ArrowLeft" ? "left" : "right"] =
-          currentTime;
-        setKeyState((prevState) => ({
-          ...prevState,
-          [event.key === "ArrowLeft" ? "left" : "right"]: true,
-        }));
-      }
-    };
-
-    const handleKeyUp = (event) => {
-      if (!countdownComplete) return;
-      const currentTime = Date.now();
-      if (event.key === "ArrowLeft" || event.key === "ArrowRight") {
-        const pressTime = lastPressTime.current.keydown;
-        if (currentTime - pressTime < syncThreshold) {
-          vaaVelocity.current = Math.min(vaaVelocity.current + 0.01, 0.5);
-        }
-        setKeyState((prevState) => ({
-          ...prevState,
-          [event.key === "ArrowLeft" ? "left" : "right"]: false,
-        }));
-      }
-    };
-
-    window.addEventListener("keydown", handleKeyDown);
-    window.addEventListener("keyup", handleKeyUp);
-
-    return () => {
-      window.removeEventListener("keydown", handleKeyDown);
-      window.removeEventListener("keyup", handleKeyUp);
-    };
-  }, [setCameraMode, countdownComplete]);
-
-  useEffect(() => {
+    // Positionner le va'a selon les props
     if (vaaRef.current) {
       vaaRef.current.position.set(vaaPosition.x, vaaPosition.y, vaaPosition.z);
     }
-  }, [vaaPosition]);
-
-  useEffect(() => {
-    const handleKeyDown = (event) => {
-      if (event.key === "ArrowRight") {
-        setCount((prevCount) => prevCount + 1); // Incrémenter le nombre
-      }
-      console.log(count);
-    };
-
-    document.addEventListener("keydown", handleKeyDown);
-    return () => {
-      document.removeEventListener("keydown", handleKeyDown);
-    };
-  }, []);
+  }, [setCameraMode, vaaPosition]);
 
   return (
     <>
