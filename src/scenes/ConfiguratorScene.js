@@ -4,6 +4,8 @@ import { useVaaCustomisation } from "../contexts/VaaCustomisationContext";
 import { Suspense, useEffect, useRef } from "react";
 import { Ocean } from "../components/Ocean";
 import { CameraModes, useCamera } from "../contexts/CameraContext";
+import { Tree } from "../models/Tree";
+import WaterOcean from "../components/WaterOcean";
 
 export const ConfiguratorScene = () => {
   const { getVaa, getPagaie } = useVaaCustomisation();
@@ -31,7 +33,9 @@ export const ConfiguratorScene = () => {
       <Suspense fallback={null}>
         <VaaModel ref={vaaRef} />
         <PagaieModel />
-        <Ocean />
+        <WaterOcean
+          vaaPosition={vaaRef.current ? vaaRef.current.position : [0, 0, 0]}
+        />
       </Suspense>
     </>
   );

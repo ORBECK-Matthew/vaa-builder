@@ -23,12 +23,6 @@ export default function App() {
     return savedTime ? parseFloat(savedTime) : null; // Convertir en nombre
   });
 
-  const leftBtn = document.getElementById("leftBtn");
-  const rightBtn = document.getElementById("rightBtn");
-
-  const [isLeftDisabled, setIsLeftDisabled] = useState(false);
-  const [isRightDisabled, setIsRightDisabled] = useState(true);
-
   const handleSceneChange = (scene) => {
     setFadeClass("fade-out");
     setTimeout(() => {
@@ -137,7 +131,7 @@ export default function App() {
             <div
               style={{
                 position: "absolute",
-                bottom: "20px",
+                bottom: "100px",
                 left: "50%",
                 transform: "translateX(-50%)",
                 display: "flex",

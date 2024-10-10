@@ -5,6 +5,7 @@
   "dependencies": {
     "@mantine/core": "^7.9.1",
     "@mantine/hooks": "^7.9.1",
+    "@nodetoy/react-nodetoy": "^0.1.24",
     "@react-three/drei": "^9.105.6",
     "@react-three/fiber": "^8.16.5",
     "@testing-library/jest-dom": "^5.17.0",
@@ -15,10 +16,11 @@
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-router-dom": "^6.25.1",
-    "react-scripts": "5.0.1",
+    "react-scripts": "^5.0.1",
     "react-toastify": "^10.0.5",
     "react-transition-group": "^4.4.5",
     "three": "^0.164.1",
+    "three-custom-shader-material": "^6.0.13",
     "three-stdlib": "^2.29.11",
     "web-vitals": "^2.1.4"
   },

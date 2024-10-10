@@ -5,6 +5,11 @@ import { Ocean } from "../components/Ocean";
 import { useFrame } from "@react-three/fiber";
 import { CameraControls } from "../components/CameraControls";
 import { useCamera, CameraModes } from "../contexts/CameraContext";
+import { Trail } from "../components/Trail";
+import { TreeGenerator } from "../components/TreeGenerator";
+import { FinishLine } from "../models/FinishLine";
+import WaterOcean from "../components/WaterOcean";
+// import WaterOcean from "../components/WaterOcean";
 
 export const GameScene = ({
   onReachFinishLine,
@@ -17,7 +22,7 @@ export const GameScene = ({
   const vaaRef = useRef();
   const PagaieModel = getPagaie();
   const vaaVelocity = useRef(0);
-  const finishLineX = 10;
+  const finishLineX = 50;
   const [count, setCount] = useState(0); // État pour le nombre
 
   const leftBtn = document.getElementById("leftBtn");
@@ -103,11 +108,15 @@ export const GameScene = ({
       />
       <Sky scale={1000} sunPosition={[500, 150, -1000]} turbidity={0.1} />
       <Suspense fallback={null}>
-        <VaaModel ref={vaaRef} />
-        <PagaieModel />
-        <Ocean />
+        <TreeGenerator count={50} radius={50} />
+        <group ref={vaaRef}>
+          <VaaModel />
+          <PagaieModel />
+        </group>
+        <Trail target={vaaRef} />
+        <WaterOcean vaaPosition={vaaRef.current?.position} />
       </Suspense>
-      <Box position={[finishLineX, 0, 0]} scale={[1, 3, 1]}></Box>
+      <FinishLine position={[finishLineX, 0, 0]} />
     </>
   );
 };
