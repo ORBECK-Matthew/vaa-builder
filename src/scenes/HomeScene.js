@@ -4,6 +4,7 @@ import { useCamera, CameraModes } from "../contexts/CameraContext";
 import { Suspense, useEffect, useRef, useState } from "react";
 import WaterOcean from "../components/WaterOcean";
 import { useVaaCustomisation } from "../contexts/VaaCustomisationContext";
+import { Ocean } from "../components/Ocean";
 
 export const HomeScene = ({ setCurrentScene }) => {
   const { setCameraMode } = useCamera();
@@ -31,18 +32,10 @@ export const HomeScene = ({ setCurrentScene }) => {
   return (
     <>
       <CameraControls />
-      <directionalLight
-        intensity={5}
-        position={[-5, 5, 5]}
-        castShadow
-        shadow-mapSize-width={2048}
-        shadow-mapSize-height={2048}
-      />
-      <Sky scale={1000} sunPosition={[500, 150, -1000]} turbidity={0.1} />
       <Suspense fallback={null}>
         <VaaModel ref={vaaRef} />
         <PagaieModel />
-        <WaterOcean
+        <Ocean
           vaaPosition={vaaRef.current ? vaaRef.current.position : [0, 0, 0]}
         />
       </Suspense>
@@ -64,6 +57,7 @@ export const HomeScene = ({ setCurrentScene }) => {
                 "2px 0 #000, -2px 0 #000, 0 2px #000, 0 -2px #000, 1px 1px #000, -1px -1px #000, 1px -1px #000, -1px 1px #000",
               fontFamily: "PoetsenOne",
               fontSize: "3em",
+              userSelect: "none",
             }}
           >
             Va'a Sprint
@@ -78,6 +72,7 @@ export const HomeScene = ({ setCurrentScene }) => {
               border: "none",
               borderRadius: "5px",
               cursor: "pointer",
+              userSelect: "none",
             }}
           >
             JOUER

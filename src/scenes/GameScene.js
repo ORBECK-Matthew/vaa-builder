@@ -99,14 +99,6 @@ export const GameScene = ({
   return (
     <>
       <CameraControls vaaRef={vaaRef} />
-      <directionalLight
-        intensity={5}
-        position={[-5, 5, 5]}
-        castShadow
-        shadow-mapSize-width={2048}
-        shadow-mapSize-height={2048}
-      />
-      <Sky scale={1000} sunPosition={[500, 150, -1000]} turbidity={0.1} />
       <Suspense fallback={null}>
         <TreeGenerator count={50} radius={50} />
         <group ref={vaaRef}>
@@ -114,7 +106,7 @@ export const GameScene = ({
           <PagaieModel />
         </group>
         <Trail target={vaaRef} />
-        <WaterOcean vaaPosition={vaaRef.current?.position} />
+        <Ocean vaaPosition={vaaRef.current?.position} />
       </Suspense>
       <FinishLine position={[finishLineX, 0, 0]} />
     </>

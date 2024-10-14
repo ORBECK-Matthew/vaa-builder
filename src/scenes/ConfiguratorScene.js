@@ -22,18 +22,10 @@ export const ConfiguratorScene = () => {
   return (
     <>
       <CameraControls vaaRef={vaaRef} />
-      <directionalLight
-        intensity={5}
-        position={[-5, 5, 5]}
-        castShadow
-        shadow-mapSize-width={2048}
-        shadow-mapSize-height={2048}
-      />
-      <Sky scale={1000} sunPosition={[500, 150, -1000]} turbidity={0.1} />
       <Suspense fallback={null}>
         <VaaModel ref={vaaRef} />
         <PagaieModel />
-        <WaterOcean
+        <Ocean
           vaaPosition={vaaRef.current ? vaaRef.current.position : [0, 0, 0]}
         />
       </Suspense>

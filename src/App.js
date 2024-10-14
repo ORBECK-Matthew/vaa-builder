@@ -8,6 +8,7 @@ import { HomeScene } from "./scenes/HomeScene";
 import { CountdownTimer } from "./components/CountDownTimer";
 import { Timer } from "./components/Timer";
 import { EndGameScene } from "./scenes/EndGameScene";
+import { Sky } from "@react-three/drei";
 
 export default function App() {
   const [currentScene, setCurrentScene] = useState("home");
@@ -87,6 +88,14 @@ export default function App() {
           {currentScene === "home" && (
             <HomeScene setCurrentScene={handleSceneChange} />
           )}
+          <directionalLight
+            intensity={5}
+            position={[-5, 5, 5]}
+            castShadow
+            shadow-mapSize-width={2048}
+            shadow-mapSize-height={2048}
+          />
+          <Sky scale={1000} sunPosition={[10, 20, -1000]} turbidity={0.2} />
         </Canvas>
 
         {currentScene === "config" && (
