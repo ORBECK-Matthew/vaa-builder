@@ -105,7 +105,7 @@ export const GameScene = ({
           <VaaModel />
           <PagaieModel />
         </group>
-        <Trail target={vaaRef} />
+        {/* <Trail target={vaaRef} /> */}
         <Ocean vaaPosition={vaaRef.current?.position} />
       </Suspense>
       <FinishLine position={[finishLineX, 0, 0]} />

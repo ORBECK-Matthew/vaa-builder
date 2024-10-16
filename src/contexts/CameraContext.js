@@ -6,7 +6,6 @@ export const CameraModes = {
   FREE: "FREE",
   VAA: "VAA",
   PAGAIE: "PAGAIE",
-  PERSONNAGE: "PERSONNAGE",
   GAME: "GAME",
   HOME: "HOME",
 };
