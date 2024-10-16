@@ -53,7 +53,7 @@ export const EndGameScene = ({
         Rejouer
       </Button>
       <Button style={{ margin: "2px" }} color="green" onClick={onConfigure}>
-        Configurer
+        Changer de va'a
       </Button>
       <div
         style={{

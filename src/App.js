@@ -147,18 +147,26 @@ export default function App() {
                 gap: "50px",
               }}
             >
-              <button id="leftBtn" className="p-10 bg-blue-500 rounded-full">
+              <button
+                id="leftBtn"
+                style={{ width: "130px" }}
+                className="p-5 bg-blue-500 rounded-full"
+              >
                 <img
                   src="assets/img/rameLeft.png"
                   alt="Va'a Rame Gauche"
-                  className="w-20 user-select-none"
+                  className="user-select-none w-full"
                 />
               </button>
-              <button id="rightBtn" className="p-10 bg-blue-500 rounded-full">
+              <button
+                id="rightBtn"
+                style={{ width: "130px" }}
+                className="p-5 bg-blue-500 rounded-full"
+              >
                 <img
                   src="assets/img/rameRight.png"
                   alt="Va'a Rame Droite"
-                  className="w-20 user-select-none"
+                  className="user-select-none"
                 />
               </button>
             </div>
