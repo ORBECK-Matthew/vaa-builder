@@ -9,6 +9,7 @@ import { Trail } from "../components/Trail";
 import { TreeGenerator } from "../components/TreeGenerator";
 import { FinishLine } from "../models/FinishLine";
 import WaterOcean from "../components/WaterOcean";
+import BoueeGenerator from "../components/BoueeGenerator";
 // import WaterOcean from "../components/WaterOcean";
 
 export const GameScene = ({
@@ -101,6 +102,7 @@ export const GameScene = ({
       <CameraControls vaaRef={vaaRef} />
       <Suspense fallback={null}>
         <TreeGenerator count={50} radius={50} />
+        <BoueeGenerator count={20} spacing={5} />
         <group ref={vaaRef}>
           <VaaModel />
           <PagaieModel />
