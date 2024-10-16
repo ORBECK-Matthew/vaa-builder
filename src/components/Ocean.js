@@ -6,7 +6,6 @@ import { Water } from "three-stdlib";
 extend({ Water });
 
 export const Ocean = function Ocean({ vaaPosition }) {
-  console.log(vaaPosition);
   const ref = useRef();
   const gl = useThree((state) => state.gl);
   const waterNormals = useLoader(

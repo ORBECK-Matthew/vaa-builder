@@ -5,7 +5,7 @@ const CameraContext = createContext({});
 export const CameraModes = {
   FREE: "FREE",
   VAA: "VAA",
-  PAGAIE: "PAGAIE",
+  // PAGAIE: "PAGAIE",
   GAME: "GAME",
   HOME: "HOME",
 };

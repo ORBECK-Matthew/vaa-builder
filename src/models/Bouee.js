@@ -9,7 +9,8 @@ export function Bouee({ position }) {
       <group rotation={[-Math.PI / 2, 0, 0]}>
         <mesh
           geometry={nodes.Torus001_0.geometry}
-          material-color={"yellow"}
+          material-color={"#dae85d"}
+          roughness={10}
           position={[-35, 4, 1]} // Vous pouvez ajuster cette position interne
           rotation={[-Math.PI / 2, 0.659, Math.PI / 2]}
           scale={0.1}

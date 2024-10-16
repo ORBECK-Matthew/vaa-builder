@@ -6,6 +6,21 @@ export const EndGameScene = ({
   elapsedTime,
   personalBestTime,
 }) => {
+  // Déterminer la médaille en fonction du temps écoulé
+  const getMedal = (time) => {
+    if (time < 10) {
+      return "💎Légende";
+    } else if (time < 15) {
+      return "🥇Or";
+    } else if (time < 201) {
+      return "🥈Argent";
+    } else {
+      return "🥉Bronze";
+    }
+  };
+  console.log("elapsedTime", elapsedTime);
+  const medal = getMedal(elapsedTime);
+
   return (
     <Affix
       style={{
@@ -28,10 +43,11 @@ export const EndGameScene = ({
         style={{
           textAlign: "center",
           fontSize: "48px",
+          marginBottom: "10px",
           fontFamily: "PoetsenOne",
         }}
       >
-        Félicitations
+        {medal}
       </Title>
       <Button style={{ margin: "2px" }} onClick={onPlayAgain}>
         Rejouer

@@ -10,6 +10,8 @@ import { TreeGenerator } from "../components/TreeGenerator";
 import { FinishLine } from "../models/FinishLine";
 import WaterOcean from "../components/WaterOcean";
 import BoueeGenerator from "../components/BoueeGenerator";
+import { Island1 } from "../models/Island1";
+import IslandGenerator from "../components/IslandGenerator";
 // import WaterOcean from "../components/WaterOcean";
 
 export const GameScene = ({
@@ -17,11 +19,11 @@ export const GameScene = ({
   countdownComplete,
   vaaPosition,
 }) => {
-  const { getVaa, getPagaie } = useVaaCustomisation();
+  const { getVaa } = useVaaCustomisation();
   const { setCameraMode } = useCamera();
   const VaaModel = getVaa();
   const vaaRef = useRef();
-  const PagaieModel = getPagaie();
+  // const PagaieModel = getPagaie();
   const vaaVelocity = useRef(0);
   const finishLineX = 50;
   const [count, setCount] = useState(0); // État pour le nombre
@@ -101,13 +103,10 @@ export const GameScene = ({
     <>
       <CameraControls vaaRef={vaaRef} />
       <Suspense fallback={null}>
-        <TreeGenerator count={50} radius={50} />
         <BoueeGenerator count={20} spacing={5} />
         <group ref={vaaRef}>
           <VaaModel />
-          <PagaieModel />
         </group>
-        {/* <Trail target={vaaRef} /> */}
         <Ocean vaaPosition={vaaRef.current?.position} />
       </Suspense>
       <FinishLine position={[finishLineX, 0, 0]} />

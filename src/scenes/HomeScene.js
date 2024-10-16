@@ -11,7 +11,6 @@ export const HomeScene = ({ setCurrentScene }) => {
   const { getVaa, getPagaie } = useVaaCustomisation();
   const VaaModel = getVaa();
   const vaaRef = useRef();
-  const PagaieModel = getPagaie();
   const [fadeClass, setFadeClass] = useState("");
 
   useEffect(() => {
@@ -34,7 +33,6 @@ export const HomeScene = ({ setCurrentScene }) => {
       <CameraControls />
       <Suspense fallback={null}>
         <VaaModel ref={vaaRef} />
-        <PagaieModel />
         <Ocean
           vaaPosition={vaaRef.current ? vaaRef.current.position : [0, 0, 0]}
         />

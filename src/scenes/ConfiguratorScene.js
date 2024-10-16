@@ -6,6 +6,7 @@ import { Ocean } from "../components/Ocean";
 import { CameraModes, useCamera } from "../contexts/CameraContext";
 import { Tree } from "../models/Tree";
 import WaterOcean from "../components/WaterOcean";
+import IslandGenerator from "../components/IslandGenerator";
 
 export const ConfiguratorScene = () => {
   const { getVaa, getPagaie } = useVaaCustomisation();
@@ -24,7 +25,7 @@ export const ConfiguratorScene = () => {
       <CameraControls vaaRef={vaaRef} />
       <Suspense fallback={null}>
         <VaaModel ref={vaaRef} />
-        <PagaieModel />
+        {/* <PagaieModel /> */}
         <Ocean
           vaaPosition={vaaRef.current ? vaaRef.current.position : [0, 0, 0]}
         />
