@@ -4,7 +4,6 @@ import { Bouee } from "../models/Bouee";
 const BoueeGenerator = ({ count, spacing }) => {
   const bouees = [];
 
-  // Générer des bouées des deux côtés de l'axe X en miroir
   for (let i = 0; i < count; i++) {
     // Bouées côté positif de l'axe X
     bouees.push(
