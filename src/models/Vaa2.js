@@ -8,7 +8,7 @@ export const TraditionVaaModel = forwardRef((props, ref) => {
   // Set the color of the materials when the component mounts
   useEffect(() => {
     // Change vaaTexture color (example: red)
-    materials.vaaTexture.color.set("#fa4f2d");
+    materials.vaaTexture.color.set("#E73418");
 
     // Change vaaInnerTexture color (example: blue)
     materials.vaaInnerTexture.color.set("#000000");

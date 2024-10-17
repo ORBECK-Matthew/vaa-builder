@@ -25,7 +25,6 @@ export const ConfiguratorScene = () => {
       <CameraControls vaaRef={vaaRef} />
       <Suspense fallback={null}>
         <VaaModel ref={vaaRef} />
-        {/* <PagaieModel /> */}
         <Ocean
           vaaPosition={vaaRef.current ? vaaRef.current.position : [0, 0, 0]}
         />

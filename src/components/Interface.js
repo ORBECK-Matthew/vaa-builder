@@ -30,9 +30,9 @@ export const Interface = () => {
       <Affix position={{ top: 65, right: 20 }}>
         {cameraMode === CameraModes.VAA && <VaaConfigurator />}
       </Affix>
-      <Affix position={{ top: 65, right: 20 }}>
+      {/* <Affix position={{ top: 65, right: 20 }}>
         {cameraMode === CameraModes.PAGAIE && <PagaieConfigurator />}
-      </Affix>
+      </Affix> */}
     </>
   );
 };

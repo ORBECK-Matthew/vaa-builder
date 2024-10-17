@@ -8,7 +8,7 @@ export const CompetitionVaaModel = forwardRef((props, ref) => {
   // Set the color of the materials when the component mounts
   useEffect(() => {
     // Change vaaTexture color (example: red)
-    materials.vaaTexture.color.set("#0050b8");
+    materials.vaaTexture.color.set("#c2ba8f");
 
     // Change vaaInnerTexture color (example: blue)
     materials.vaaInnerTexture.color.set("#000000");

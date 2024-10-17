@@ -6,12 +6,12 @@ export const VaaConfigurator = () => {
   const { vaa, setVaa } = useVaaCustomisation();
 
   return (
-    <Stack spacing="sm" p={30} bg="#228BE61A" w={393}>
+    <Stack spacing="sm" p={30} bg="#228BE61A" w={350}>
       <Grid>
         <Grid.Col span={6}>
           <Box h={100} onClick={() => setVaa(0)} style={{ cursor: "pointer" }}>
             <BackgroundImage
-              src="/assets/img/vaaThumb2.png"
+              src="/assets/img/vaa1Thumb-min.png"
               radius="md"
               h={100}
               style={{
@@ -19,7 +19,7 @@ export const VaaConfigurator = () => {
               }}
             >
               <Center p="xl">
-                <Text c="white">Vaa 1</Text>
+                <Text c="white"></Text>
               </Center>
             </BackgroundImage>
           </Box>
@@ -27,7 +27,7 @@ export const VaaConfigurator = () => {
         <Grid.Col span={6}>
           <Box h={100} onClick={() => setVaa(1)} style={{ cursor: "pointer" }}>
             <BackgroundImage
-              src="/assets/img/vaaThumb1.png"
+              src="/assets/img/vaa2Thumb-min.png"
               radius="md"
               h={100}
               style={{
@@ -35,7 +35,7 @@ export const VaaConfigurator = () => {
               }}
             >
               <Center p="xl">
-                <Text c="white">Vaa 2</Text>
+                <Text c="white"></Text>
               </Center>
             </BackgroundImage>
           </Box>
@@ -43,7 +43,7 @@ export const VaaConfigurator = () => {
         <Grid.Col span={6}>
           <Box h={100} onClick={() => setVaa(2)} style={{ cursor: "pointer" }}>
             <BackgroundImage
-              src="/assets/img/vaaThumb3.png"
+              src="/assets/img/vaa3Thumb-min.png"
               radius="md"
               h={100}
               style={{
@@ -51,7 +51,7 @@ export const VaaConfigurator = () => {
               }}
             >
               <Center p="xl">
-                <Text c="white">Vaa 3</Text>
+                <Text c="white"></Text>
               </Center>
             </BackgroundImage>
           </Box>

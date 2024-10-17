@@ -153,7 +153,7 @@ export default function App() {
                 className="p-5 bg-blue-500 rounded-full"
               >
                 <img
-                  src="assets/img/rameLeft.png"
+                  src="assets/img/rameLeft-min.png"
                   alt="Va'a Rame Gauche"
                   className="user-select-none w-full"
                 />
@@ -164,7 +164,7 @@ export default function App() {
                 className="p-5 bg-blue-500 rounded-full"
               >
                 <img
-                  src="assets/img/rameRight.png"
+                  src="assets/img/rameRight-min.png"
                   alt="Va'a Rame Droite"
                   className="user-select-none"
                 />

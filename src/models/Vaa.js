@@ -8,7 +8,7 @@ export const DefaultVaaModel = forwardRef((props, ref) => {
   // Set the color of the materials when the component mounts
   useEffect(() => {
     // Change vaaTexture color (example: red)
-    materials.vaaTexture.color.set("#5ec9ff");
+    materials.vaaTexture.color.set("#4D83E7");
 
     // Change vaaInnerTexture color (example: blue)
     materials.vaaInnerTexture.color.set("#000000");
